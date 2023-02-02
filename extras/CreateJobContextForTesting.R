@@ -40,14 +40,14 @@ analysisSpecifications <- Strategus::createEmptyAnalysisSpecificiations() %>%
   ) %>%
   Strategus::addModuleSpecifications(
     createCharacterizationModuleSpecifications(
-      targetIds = c(1:3), 
+      targetIds = c(1:3),
       outcomeIds = c(1),
       dechallengeStopInterval = 30,
       dechallengeEvaluationWindow = 30,
-      riskWindowStart = 1, 
-      startAnchor = 'cohort start',
+      riskWindowStart = 1,
+      startAnchor = "cohort start",
       riskWindowEnd = 0,
-      endAnchor = 'cohort end', 
+      endAnchor = "cohort end",
       covariateSettings = FeatureExtraction::createDefaultCovariateSettings()
     )
   )

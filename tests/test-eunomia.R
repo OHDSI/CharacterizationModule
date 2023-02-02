@@ -15,7 +15,7 @@ Eunomia::createCohorts(connectionDetails = connectionDetails)
 
 test_that("Run module", {
   source("Main.R")
-  #debugonce(execute)
+  # debugonce(execute)
   execute(jobContext)
   resultsFiles <- list.files(resultsfolder)
   expect_true("c_covariates.csv" %in% resultsFiles)
