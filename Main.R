@@ -14,6 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Adding library references that are required for Strategus
+library(CohortGenerator)
+library(DatabaseConnector)
+library(keyring)
+library(ParallelLogger)
+library(SqlRender)
+
+# Adding RSQLite so that we can test modules with Eunomia
+library(RSQLite)
+
 # Module methods -------------------------
 getModuleInfo <- function() {
   checkmate::assert_file_exists("MetaData.json")
@@ -68,7 +78,6 @@ execute <- function(jobContext) {
   Characterization::exportDatabaseToCsv(
     connectionDetails = sqliteConnectionDetails,
     resultSchema = "main",
-    targetDialect = "sqlite",
     tempEmulationSchema = NULL,
     tablePrefix = moduleInfo$TablePrefix,
     filePrefix = moduleInfo$TablePrefix,
