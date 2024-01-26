@@ -1,3 +1,7 @@
+CharacterizationModule 0.5.0
+=======================
+- Using renv project profiles to manage core packages required for module execution vs. those that are needed for development purposes.
+
 CharacterizationModule 0.4.0
 =======================
 - Updated module to use HADES wide lock file and updated to use renv v1.0.2
