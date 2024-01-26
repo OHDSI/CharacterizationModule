@@ -1,4 +1,4 @@
-# Copyright 2023 Observational Health Data Sciences and Informatics
+# Copyright 2024 Observational Health Data Sciences and Informatics
 #
 # This file is part of CharacterizationModule
 #
@@ -13,6 +13,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Adding library references that are required for Strategus
+library(CohortGenerator)
+library(DatabaseConnector)
+library(keyring)
+library(ParallelLogger)
+library(SqlRender)
+
+# Adding RSQLite so that we can test modules with Eunomia
+library(RSQLite)
 
 # Module methods -------------------------
 getModuleInfo <- function() {
@@ -68,7 +78,6 @@ execute <- function(jobContext) {
   Characterization::exportDatabaseToCsv(
     connectionDetails = sqliteConnectionDetails,
     resultSchema = "main",
-    targetDialect = "sqlite",
     tempEmulationSchema = NULL,
     tablePrefix = moduleInfo$TablePrefix,
     filePrefix = moduleInfo$TablePrefix,
@@ -110,6 +119,8 @@ createDataModelSchema <- function(jobContext) {
   moduleInfo <- getModuleInfo()
   tablePrefix <- moduleInfo$TablePrefix
   resultsDatabaseSchema <- jobContext$moduleExecutionSettings$resultsDatabaseSchema
+  # Workaround for issue https://github.com/tidyverse/vroom/issues/519:
+  readr::local_edition(1)
   resultsDataModel <- ResultModelManager::loadResultsDataModelSpecifications(
     filePath = system.file(
       "settings/resultsDataModelSpecification.csv",
@@ -133,4 +144,3 @@ createDataModelSchema <- function(jobContext) {
     sql = sql
   )
 }
-
