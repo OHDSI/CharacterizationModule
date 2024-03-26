@@ -46,7 +46,7 @@ execute <- function(jobContext) {
 
   workFolder <- jobContext$moduleExecutionSettings$workSubFolder # does this exist?
 
-  rlang::inform("Executing DescriptiveStudies")
+  rlang::inform("Executing Characterization")
   moduleInfo <- getModuleInfo()
 
   # run the models

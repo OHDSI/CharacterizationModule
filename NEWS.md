@@ -1,3 +1,7 @@
+CharacterizationModule 0.5.1
+=======================
+- Using Characterization v0.1.4 for improved logging.
+
 CharacterizationModule 0.5.0
 =======================
 - Using renv project profiles to manage core packages required for module execution vs. those that are needed for development purposes.
