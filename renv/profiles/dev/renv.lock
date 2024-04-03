@@ -31,14 +31,14 @@
     },
     "Characterization": {
       "Package": "Characterization",
-      "Version": "0.1.4",
+      "Version": "0.1.5",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OHDSI",
       "RemoteRepo": "Characterization",
-      "RemoteRef": "v0.1.4",
-      "RemoteSha": "32bfbdb40ae8ae1f5a6f9d14a30760767c8141c0"
+      "RemoteRef": "v0.1.5",
+      "RemoteSha": "3fb59ec13f904309b770633c40d119213a21ad62"
     },
     "CohortGenerator": {
       "Package": "CohortGenerator",
