@@ -1,3 +1,9 @@
+CharacterizationModule 0.6.0
+=======================
+- Using Characterization 0.2.0
+- FeatureExtraction 3.5.1
+
+
 CharacterizationModule 0.5.1
 =======================
 - Using Characterization v0.1.4 for improved logging.

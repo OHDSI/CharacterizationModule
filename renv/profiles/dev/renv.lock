@@ -31,14 +31,14 @@
     },
     "Characterization": {
       "Package": "Characterization",
-      "Version": "0.1.5",
+      "Version": "0.2.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OHDSI",
       "RemoteRepo": "Characterization",
-      "RemoteRef": "v0.1.5",
-      "RemoteSha": "3fb59ec13f904309b770633c40d119213a21ad62"
+      "RemoteRef": "v0.2.0",
+      "RemoteSha": "aed165f87676d1349d7b84f55a57b5f086acd2a8"
     },
     "CohortGenerator": {
       "Package": "CohortGenerator",
@@ -98,14 +98,14 @@
     },
     "FeatureExtraction": {
       "Package": "FeatureExtraction",
-      "Version": "3.3.1",
+      "Version": "3.5.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OHDSI",
       "RemoteRepo": "FeatureExtraction",
-      "RemoteRef": "v3.3.1",
-      "RemoteSha": "1face4df746173667e961d681050021959389694"
+      "RemoteRef": "v3.5.1",
+      "RemoteSha": "a93992be1a2f7d3710aa8249287af937872d50f3"
     },
     "ParallelLogger": {
       "Package": "ParallelLogger",
