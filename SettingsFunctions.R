@@ -10,6 +10,7 @@ createCharacterizationModuleSpecifications <- function(targetIds,
                                                          endAnchor = c("cohort end", "cohort end")
                                                        ),
                                                        minPriorObservation = 0,
+                                                       minCharacterizationMean = 0,
                                                        covariateSettings = FeatureExtraction::createDefaultCovariateSettings()) {
   # input checks
   if (!inherits(timeAtRisk, "data.frame")) {
@@ -42,7 +43,8 @@ createCharacterizationModuleSpecifications <- function(targetIds,
         startAnchor = timeAtRisk$startAnchor[i],
         riskWindowEnd = timeAtRisk$riskWindowEnd[i],
         endAnchor = timeAtRisk$endAnchor[i],
-        covariateSettings = covariateSettings
+        covariateSettings = covariateSettings,
+        minCharacterizationMean = minCharacterizationMean
       )
     }
   )
@@ -55,7 +57,7 @@ createCharacterizationModuleSpecifications <- function(targetIds,
 
   specifications <- list(
     module = "CharacterizationModule",
-    version = "0.5.2",
+    version = "0.6.0",
     remoteRepo = "github.com",
     remoteUsername = "ohdsi",
     settings = analysis

@@ -54,8 +54,8 @@ updatedPackages <- list(
     Source = "Repository",
     Repository = "CRAN"
   ),
-  "OHDSI/Characterization@v0.1.5",
-  "OHDSI/FeatureExtraction@v3.3.1",
+  "OHDSI/Characterization@v0.2.0",
+  "OHDSI/FeatureExtraction@v3.5.1",
   "OHDSI/CohortGenerator@v0.8.1",
   "OHDSI/ResultModelManager@v0.5.6"
 )
@@ -69,11 +69,20 @@ updatedDevPackages <- list(
   "OHDSI/Eunomia@v1.0.2"
 )
 
+# Sync lock files with HADES-wide lock file --------------
+hadesWideLockFileName <- normalizePath("hades-wide.lock")
+unlink(hadesWideLockFileName)
+utils::download.file(
+  url = "https://raw.githubusercontent.com/OHDSI/Hades/main/hadesWideReleases/2023Q3/renv.lock",
+  destfile = hadesWideLockFileName
+)
+
 # Deactivates and cleans the project to remove any/all old references
 renv::deactivate(clean = TRUE)
 
 # Initialize the default profile ---------
 renv::activate(profile = NULL)
+
 # Use the implicit option so renv crawls the full project.
 renv::init(settings = renv::settings$snapshot.type("implicit"))
 # Record the explicit package versions mentioned above
@@ -107,13 +116,7 @@ file.rename(".renvignore-backup", ".renvignore")
 # Re-activate the default profile - the dev profile is only used for unit tests
 renv::activate(profile = NULL) # Sets the default profile as the default for the project
 
-# Sync lock files with HADES-wide lock file --------------
-hadesWideLockFileName <- normalizePath("hades-wide.lock")
-unlink(hadesWideLockFileName)
-utils::download.file(
-  url = "https://raw.githubusercontent.com/OHDSI/Hades/main/hadesWideReleases/2023Q3/renv.lock",
-  destfile = hadesWideLockFileName
-)
+renv::deactivate()
 
 # Compare HADES-wide lock file to the dev lock file
 hwVsProjDevLockFile <- Strategus::compareLockFiles(
