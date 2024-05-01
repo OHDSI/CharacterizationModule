@@ -93,13 +93,12 @@ createCharacterizationModuleSpecifications <- function(
 
   aggregateCovariateSettings <- list()
 
-  for(i in 1:length(timeAtRisk)){
+  for(i in 1:nrow(timeAtRisk)){
     for(j in 1:length(outcomeIdsList)){
-      for (k in 1:length(outcomeWashoutDaysVector)) {
         aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
           targetIds = targetIds,
           outcomeIds = outcomeIdsList[[j]],
-          outcomeWashoutDays = outcomeWashoutDaysVector[k],
+          outcomeWashoutDays = outcomeWashoutDaysVector[j],
           minPriorObservation = minPriorObservation,
           riskWindowStart = timeAtRisk$riskWindowStart[i],
           startAnchor = timeAtRisk$startAnchor[i],
@@ -112,8 +111,6 @@ createCharacterizationModuleSpecifications <- function(
         )
       }
     }
-
-  }
 
   analysis <- Characterization::createCharacterizationSettings(
     timeToEventSettings = list(timeToEventSettings),
