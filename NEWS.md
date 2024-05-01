@@ -7,6 +7,10 @@ CharacterizationModule 0.6.0
 CharacterizationModule 0.5.1
 =======================
 - Using Characterization v0.1.4 for improved logging.
+CharacterizationModule 0.7.0
+=======================
+- Supporting Characterization 0.3.1
+
 
 CharacterizationModule 0.5.0
 =======================
