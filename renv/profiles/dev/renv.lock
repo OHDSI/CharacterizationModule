@@ -37,8 +37,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "OHDSI",
       "RemoteRepo": "Characterization",
-      "RemoteRef": "6aa7efc2686801784f2ed740e0cbf49ad4bd3967",
-      "RemoteSha": "6aa7efc2686801784f2ed740e0cbf49ad4bd3967"
+      "RemoteRef": "a1b01ec00f95487ae77b0775cd9034138fc5a14b",
+      "RemoteSha": "a1b01ec00f95487ae77b0775cd9034138fc5a14b"
     },
     "CohortGenerator": {
       "Package": "CohortGenerator",

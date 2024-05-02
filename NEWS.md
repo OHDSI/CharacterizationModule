@@ -1,3 +1,7 @@
+CharacterizationModule 0.7.0-2
+=======================
+- Using Characterization 0.3.1
+
 CharacterizationModule 0.7.0-1
 =======================
 - Using Characterization 0.3.1

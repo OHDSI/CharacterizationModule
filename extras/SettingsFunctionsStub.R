@@ -1,56 +1,59 @@
-createCharacterizationModuleSpecifications <- function(targetIds,
-                                                       outcomeIdsList,
-                                                       outcomeWashoutDaysVector = c(365), # same length as outcomeIdsList
-                                                       dechallengeStopInterval = 30,
-                                                       dechallengeEvaluationWindow = 30,
-                                                       timeAtRisk = data.frame(
-                                                         riskWindowStart = c(1, 1),
-                                                         startAnchor = c("cohort start", "cohort start"),
-                                                         riskWindowEnd = c(0, 365),
-                                                         endAnchor = c("cohort end", "cohort end")
-                                                       ),
-                                                       minPriorObservation = 0,
-                                                       minCharacterizationMean = 0,
-                                                       covariateSettings = FeatureExtraction::createCovariateSettings(
-                                                         useDemographicsGender = T,
-                                                         useDemographicsAge = T,
-                                                         useDemographicsAgeGroup = T,
-                                                         useDemographicsRace = T,
-                                                         useDemographicsEthnicity = T,
-                                                         useDemographicsTimeInCohort = T,
-                                                         useDemographicsPriorObservationTime = T,
-                                                         useDemographicsPostObservationTime = T,
-                                                         useConditionGroupEraLongTerm = T,
-                                                         useDrugGroupEraLongTerm = T,
-                                                         useProcedureOccurrenceLongTerm = T,
-                                                         useMeasurementLongTerm = T,
-                                                         useObservationLongTerm = T,
-                                                         useDeviceExposureLongTerm = T,
-                                                         useVisitConceptCountLongTerm = T,
-                                                         endDays = -1,
-                                                         longTermStartDays =  -365
-                                                       ),
-                                                       duringCovariateSettings = Characterization::createDuringCovariateSettings(
-                                                         useConditionGroupEraDuring = T,
-                                                         useDrugGroupEraDuring = T,
-                                                         useProcedureOccurrenceDuring = T,
-                                                         useDeviceExposureDuring = T,
-                                                         useMeasurementDuring = T,
-                                                         useObservationDuring = T,
-                                                         useVisitConceptCountDuring = T
-                                                       ),
-                                                       afterCovariateSettings = FeatureExtraction::createCovariateSettings(
-                                                         useConditionGroupEraMediumTerm = T,
-                                                         useDrugGroupEraMediumTerm = T,
-                                                         useProcedureOccurrenceMediumTerm = T,
-                                                         useMeasurementMediumTerm = T,
-                                                         useObservationMediumTerm = T,
-                                                         useDeviceExposureMediumTerm = T,
-                                                         useVisitConceptCountMediumTerm = T,
-                                                         endDays = 365,
-                                                         mediumTermStartDays = 1,
-                                                       )
-){
+createCharacterizationModuleSpecifications <- function(
+    targetIds,
+    outcomeIdsList,
+    outcomeWashoutDaysVector = c(365), # same length as outcomeIdsList
+    dechallengeStopInterval = 30,
+    dechallengeEvaluationWindow = 30,
+    timeAtRisk = data.frame(
+      riskWindowStart = c(1, 1),
+      startAnchor = c("cohort start", "cohort start"),
+      riskWindowEnd = c(0, 365),
+      endAnchor = c("cohort end", "cohort end")
+    ),
+    minPriorObservation = 365,
+    minCharacterizationMean = 0.01,
+    covariateSettings = FeatureExtraction::createCovariateSettings(
+      useDemographicsGender = T,
+      useDemographicsAge = T,
+      useDemographicsAgeGroup = T,
+      useDemographicsRace = T,
+      useDemographicsEthnicity = T,
+      useDemographicsIndexYear = T,
+      useDemographicsIndexMonth = T,
+      useDemographicsTimeInCohort = T,
+      useDemographicsPriorObservationTime = T,
+      useDemographicsPostObservationTime = T,
+      useConditionGroupEraLongTerm = T,
+      useDrugGroupEraOverlapping = T,
+      useDrugGroupEraLongTerm = T,
+      useProcedureOccurrenceLongTerm = T,
+      useMeasurementLongTerm = T,
+      useObservationLongTerm = T,
+      useDeviceExposureLongTerm = T,
+      useVisitConceptCountLongTerm = T,
+      useConditionGroupEraShortTerm = T,
+      useDrugGroupEraShortTerm = T,
+      useProcedureOccurrenceShortTerm = T,
+      useMeasurementShortTerm = T,
+      useObservationShortTerm = T,
+      useDeviceExposureShortTerm = T,
+      useVisitConceptCountShortTerm = T,
+      endDays = 0,
+      longTermStartDays =  -365,
+      shortTermStartDays = -30
+    ),
+    caseCovariateSettings = Characterization::createDuringCovariateSettings(
+      useConditionGroupEraDuring = T,
+      useDrugGroupEraDuring = T,
+      useProcedureOccurrenceDuring = T,
+      useDeviceExposureDuring = T,
+      useMeasurementDuring = T,
+      useObservationDuring = T,
+      useVisitConceptCountDuring = T
+    ),
+    casePreTargetDuration = 365,
+    casePostOutcomeDuration = 365
+) {
   # input checks
   if (!inherits(timeAtRisk, "data.frame")) {
     stop("timeAtRisk must be a data.frame")
@@ -100,8 +103,9 @@ createCharacterizationModuleSpecifications <- function(targetIds,
         riskWindowEnd = timeAtRisk$riskWindowEnd[i],
         endAnchor = timeAtRisk$endAnchor[i],
         covariateSettings = covariateSettings,
-        duringCovariateSettings = duringCovariateSettings,
-        afterCovariateSettings = afterCovariateSettings,
+        caseCovariateSettings = caseCovariateSettings,
+        casePreTargetDuration = casePreTargetDuration,
+        casePostOutcomeDuration = casePostOutcomeDuration,
         minCharacterizationMean = minCharacterizationMean
       )
     }
