@@ -1,6 +1,6 @@
 {
   "Name": "CharacterizationModule",
-  "Version": "0.7.0-3",
+  "Version": "0.7.0-4",
   "Dependencies": ["CohortGeneratorModule"],
   "TablePrefix": "c_"
 }
