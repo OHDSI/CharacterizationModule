@@ -54,7 +54,7 @@ updatedPackages <- list(
     Source = "Repository",
     Repository = "CRAN"
   ),
-  "OHDSI/Characterization@a1b01ec00f95487ae77b0775cd9034138fc5a14b",
+  "OHDSI/Characterization@00e94e2ab41469172153de4359973fa2b7c05994",
   "OHDSI/FeatureExtraction@v3.5.1",
   "OHDSI/CohortGenerator@v0.8.1",
   "OHDSI/ResultModelManager@v0.5.6"
