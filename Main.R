@@ -49,20 +49,42 @@ execute <- function(jobContext) {
   rlang::inform("Executing Characterization")
   moduleInfo <- getModuleInfo()
 
-  # run the models
-  Characterization::runCharacterizationAnalyses(
-    connectionDetails = jobContext$moduleExecutionSettings$connectionDetails,
-    targetDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-    targetTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-    outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-    outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-    cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-    characterizationSettings = jobContext$settings,
-    databaseId = jobContext$moduleExecutionSettings$databaseId,
-    saveDirectory = workFolder,
-    tablePrefix = moduleInfo$TablePrefix
+  # Check if we can skip the "run" step
+  # via the incremental file
+  recordKeepingFile <- file.path(workFolder, "moduleIncremental.csv")
+  checksum <- CohortGenerator::computeChecksum(
+    paste0(jobContext$settings, collapse = "")
+  )
+  isTaskRequired <- CohortGenerator::isTaskRequired(
+    moduleVersion = moduleInfo$Version,
+    checksum = checksum,
+    recordKeepingFile = recordKeepingFile
   )
 
+  if (isTRUE(isTaskRequired)) {
+    # run the models
+    Characterization::runCharacterizationAnalyses(
+      connectionDetails = jobContext$moduleExecutionSettings$connectionDetails,
+      targetDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+      targetTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+      outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+      outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+      cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+      characterizationSettings = jobContext$settings,
+      databaseId = jobContext$moduleExecutionSettings$databaseId,
+      saveDirectory = workFolder,
+      tablePrefix = moduleInfo$TablePrefix
+    )
+
+    # Mark the task as completed
+    CohortGenerator::recordTasksDone(
+      moduleVersion = moduleInfo$Version,
+      checksum = checksum,
+      recordKeepingFile = recordKeepingFile
+    )
+  } else {
+    message("Skipping runCharacterizationAnalyses since this task was performed previously.")
+  }
 
   # Export the results
   rlang::inform("Export data to csv files")
@@ -75,13 +97,21 @@ execute <- function(jobContext) {
   # get the result location folder
   resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
-  Characterization::exportDatabaseToCsv(
-    connectionDetails = sqliteConnectionDetails,
-    resultSchema = "main",
-    tempEmulationSchema = NULL,
-    tablePrefix = moduleInfo$TablePrefix,
-    filePrefix = moduleInfo$TablePrefix,
-    saveDirectory = resultsFolder
+  # Calling the export with a 10 minute timeout and error if it take
+  # longer than 10 minutes
+  R.utils::withTimeout(
+    expr = {
+      Characterization::exportDatabaseToCsv(
+        connectionDetails = sqliteConnectionDetails,
+        resultSchema = "main",
+        tempEmulationSchema = NULL,
+        tablePrefix = moduleInfo$TablePrefix,
+        filePrefix = moduleInfo$TablePrefix,
+        saveDirectory = resultsFolder
+      )
+    },
+    timeout = 600,
+    onTimeout = "error"
   )
 
   # Export the resultsDataModelSpecification.csv
