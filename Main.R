@@ -53,7 +53,7 @@ execute <- function(jobContext) {
   # via the incremental file
   recordKeepingFile <- file.path(workFolder, "moduleIncremental.csv")
   checksum <- CohortGenerator::computeChecksum(
-    jobContext$settings
+    paste0(jobContext$settings, collapse = "")
   )
   isTaskRequired <- CohortGenerator::isTaskRequired(
     moduleVersion = moduleInfo$Version,
