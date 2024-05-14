@@ -53,7 +53,8 @@ createCharacterizationModuleSpecifications <- function(
       useVisitConceptCountDuring = T
     ),
     casePreTargetDuration = 365,
-    casePostOutcomeDuration = 365
+    casePostOutcomeDuration = 365,
+    maxRowCount = 100000
 ) {
   # input checks
   if (!inherits(timeAtRisk, "data.frame")) {
@@ -127,10 +128,13 @@ createCharacterizationModuleSpecifications <- function(
 
   specifications <- list(
     module = "CharacterizationModule",
-    version = "0.7.0-5",
+    version = "0.7.0-6",
     remoteRepo = "github.com",
     remoteUsername = "ohdsi",
-    settings = analysis
+    settings = list(
+      analysis = analysis,
+      maxRowCount = maxRowCount
+      )
   )
   class(specifications) <- c("CharacterizationModuleSpecifications", "ModuleSpecifications")
   return(specifications)

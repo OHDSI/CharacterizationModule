@@ -34,7 +34,7 @@ execute <- function(jobContext) {
   rlang::inform("Validating inputs")
   inherits(jobContext, "list")
 
-  if (is.null(jobContext$settings)) {
+  if (is.null(jobContext$settings$analysis)) {
     stop("Analysis settings not found in job context")
   }
   if (is.null(jobContext$sharedResources)) {
@@ -57,7 +57,7 @@ execute <- function(jobContext) {
     outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
     outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
     cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-    characterizationSettings = jobContext$settings,
+    characterizationSettings = jobContext$settings$analysis,
     databaseId = jobContext$moduleExecutionSettings$databaseId,
     saveDirectory = workFolder,
     tablePrefix = moduleInfo$TablePrefix
@@ -81,7 +81,8 @@ execute <- function(jobContext) {
     tempEmulationSchema = NULL,
     tablePrefix = moduleInfo$TablePrefix,
     filePrefix = moduleInfo$TablePrefix,
-    saveDirectory = resultsFolder
+    saveDirectory = resultsFolder,
+    maxRowCount = jobContext$settings$maxRowCount
   )
 
   # Export the resultsDataModelSpecification.csv
