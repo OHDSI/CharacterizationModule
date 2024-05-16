@@ -99,25 +99,24 @@ createCharacterizationModuleSpecifications <- function(
 
   aggregateCovariateSettings <- list()
 
-  for(i in 1:nrow(timeAtRisk)){
-    for(j in 1:length(outcomeIdsList)){
-      aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
-        targetIds = targetIds,
-        outcomeIds = outcomeIdsList[[j]],
-        outcomeWashoutDays = outcomeWashoutDaysVector[j],
-        minPriorObservation = minPriorObservation,
-        riskWindowStart = timeAtRisk$riskWindowStart[i],
-        startAnchor = timeAtRisk$startAnchor[i],
-        riskWindowEnd = timeAtRisk$riskWindowEnd[i],
-        endAnchor = timeAtRisk$endAnchor[i],
-        covariateSettings = covariateSettings,
-        caseCovariateSettings = caseCovariateSettings,
-        casePreTargetDuration = casePreTargetDuration,
-        casePostOutcomeDuration = casePostOutcomeDuration,
-        minCharacterizationMean = minCharacterizationMean
-      )
-    }
+  for(j in 1:length(outcomeIdsList)){
+    aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
+      targetIds = targetIds,
+      outcomeIds = outcomeIdsList[[j]],
+      outcomeWashoutDays = outcomeWashoutDaysVector[j],
+      minPriorObservation = minPriorObservation,
+      riskWindowStart = timeAtRisk$riskWindowStart,
+      startAnchor = timeAtRisk$startAnchor,
+      riskWindowEnd = timeAtRisk$riskWindowEnd,
+      endAnchor = timeAtRisk$endAnchor,
+      covariateSettings = covariateSettings,
+      caseCovariateSettings = caseCovariateSettings,
+      casePreTargetDuration = casePreTargetDuration,
+      casePostOutcomeDuration = casePostOutcomeDuration,
+      minCharacterizationMean = minCharacterizationMean
+    )
   }
+
 
   analysis <- Characterization::createCharacterizationSettings(
     timeToEventSettings = list(timeToEventSettings),
