@@ -60,56 +60,11 @@ execute <- function(jobContext) {
     characterizationSettings = jobContext$settings$analysis,
     databaseId = jobContext$moduleExecutionSettings$databaseId,
     saveDirectory = workFolder,
-    tablePrefix = moduleInfo$TablePrefix
-  )
-
-
-  # Export the results
-  rlang::inform("Export data to csv files")
-
-  sqliteConnectionDetails <- DatabaseConnector::createConnectionDetails(
-    dbms = "sqlite",
-    server = file.path(workFolder, "sqliteCharacterization", "sqlite.sqlite")
-  )
-
-  # get the result location folder
-  resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
-
-  Characterization::exportDatabaseToCsv(
-    connectionDetails = sqliteConnectionDetails,
-    resultSchema = "main",
-    tempEmulationSchema = NULL,
     tablePrefix = moduleInfo$TablePrefix,
-    filePrefix = moduleInfo$TablePrefix,
-    saveDirectory = resultsFolder,
-    maxRowCount = jobContext$settings$maxRowCount
-  )
-
-  # Export the resultsDataModelSpecification.csv
-  resultsDataModel <- CohortGenerator::readCsv(
-    file = system.file(
-      "settings/resultsDataModelSpecification.csv",
-      package = "Characterization"
-    ),
-    warnOnCaseMismatch = FALSE
-  )
-
-  # add the prefix to the tableName column
-  resultsDataModel$tableName <- paste0(moduleInfo$TablePrefix, resultsDataModel$tableName)
-
-  CohortGenerator::writeCsv(
-    x = resultsDataModel,
-    file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
-    warnOnCaseMismatch = FALSE,
-    warnOnFileNameCaseMismatch = FALSE,
-    warnOnUploadRuleViolations = FALSE
-  )
-
-  # Zip the results
-  rlang::inform("Zipping csv files")
-  DatabaseConnector::createZipFile(
-    zipFile = file.path(resultsFolder, "results.zip"),
-    files = resultsFolder
+    minCellCount = jobContext$moduleExecutionSettings$minCellCount,
+    incremental = jobContext$settings$incremental,
+    threads = parallel::detectCores(),
+    minCharacterizationMean = jobContext$settings$minCharacterizationMean
   )
 }
 
