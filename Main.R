@@ -66,6 +66,40 @@ execute <- function(jobContext) {
     threads = parallel::detectCores(),
     minCharacterizationMean = jobContext$settings$minCharacterizationMean
   )
+
+  # move results from work folder to output folder
+  resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+
+  csvFileLoc <- file.path(workFolder,'results')
+  csvFiles <- dir(csvFileLoc)
+  for(csvFile in csvFiles){
+    message(paste0('Exporting csv file ', csvFile))
+    file.copy(
+      from = file.path(csvFileLoc, csvFile),
+      to = file.path(resultsFolder, csvFile)
+    )
+  }
+
+  # Export the resultsDataModelSpecification.csv
+  resultsDataModel <- CohortGenerator::readCsv(
+    file = system.file(
+      "settings/resultsDataModelSpecification.csv",
+      package = "Characterization"
+    ),
+    warnOnCaseMismatch = FALSE
+  )
+
+  # add the prefix to the tableName column
+  resultsDataModel$tableName <- paste0(moduleInfo$TablePrefix, resultsDataModel$tableName)
+
+  CohortGenerator::writeCsv(
+    x = resultsDataModel,
+    file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+    warnOnCaseMismatch = FALSE,
+    warnOnFileNameCaseMismatch = FALSE,
+    warnOnUploadRuleViolations = FALSE
+  )
+
 }
 
 createDataModelSchema <- function(jobContext) {

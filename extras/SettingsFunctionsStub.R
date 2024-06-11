@@ -51,8 +51,7 @@ createCharacterizationModuleSpecifications <- function(
     ),
     casePreTargetDuration = 365,
     casePostOutcomeDuration = 365,
-    incremental = T,
-    threads = 5
+    incremental = T
 ) {
   # input checks
 
@@ -133,8 +132,7 @@ createCharacterizationModuleSpecifications <- function(
     settings = list(
       analysis = analysis,
       minCharacterizationMean = minCharacterizationMean,
-      incremental = incremental,
-      threads = threads
+      incremental = incremental
       )
   )
   class(specifications) <- c("CharacterizationModuleSpecifications", "ModuleSpecifications")
