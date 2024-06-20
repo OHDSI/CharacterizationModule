@@ -127,7 +127,7 @@ createCharacterizationModuleSpecifications <- function(
 
   specifications <- list(
     module = "CharacterizationModule",
-    version = "1.0.1",
+    version = "1.0.2",
     remoteRepo = "github.com",
     remoteUsername = "ohdsi",
     settings = list(
