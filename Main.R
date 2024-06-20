@@ -76,7 +76,7 @@ execute <- function(jobContext) {
     message(paste0('Exporting csv file ', csvFile))
     file.copy(
       from = file.path(csvFileLoc, csvFile),
-      to = file.path(resultsFolder, csvFile)
+      to = file.path(resultsFolder, paste0(moduleInfo$TablePrefix,csvFile))
     )
   }
 
