@@ -63,7 +63,7 @@ execute <- function(jobContext) {
     tablePrefix = moduleInfo$TablePrefix,
     minCellCount = jobContext$moduleExecutionSettings$minCellCount,
     incremental = jobContext$settings$incremental,
-    threads = ifelse(Sys.getenv('CharacterizationThreads') == "", parallel::detectCores(),Sys.getenv('CharacterizationThreads') ),
+    threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", parallel::detectCores(),Sys.getenv('CharacterizationThreads') )),
     minCharacterizationMean = jobContext$settings$minCharacterizationMean
   )
 
