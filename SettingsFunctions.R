@@ -57,14 +57,14 @@ createCharacterizationModuleSpecifications <- function(
   # input checks
 
   if(!inherits(outcomeIds, "numeric")){
-    stop("outcomeIdsList must be a numeric or a numeric vector")
+    stop("outcomeIds must be a numeric or a numeric vector")
   }
 
   if(!inherits(outcomeWashoutDays, "numeric")){
     stop("outcomeWashoutDays must be a numeric or a numeric vector")
   }
   if(length(outcomeIds) != length(outcomeWashoutDays)){
-    stop("outcomeWashoutDaysVector and outcomeIdsList must be same length")
+    stop("outcomeWashoutDaysVector and outcomeIds must be same length")
   }
   if(length(minPriorObservation) != 1){
     stop("minPriorObservation needs to be length 1")
@@ -101,21 +101,23 @@ createCharacterizationModuleSpecifications <- function(
 
   aggregateCovariateSettings <- list()
 
-  for(j in 1:length(outcomeIdsList)){
-    aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
-      targetIds = targetIds,
-      outcomeIds = outcomeIdsList[[j]],
-      minPriorObservation = minPriorObservation,
-      outcomeWashoutDays = outcomeWashoutDaysVector[j],
-      riskWindowStart = riskWindowStart,
-      startAnchor = startAnchor,
-      riskWindowEnd = riskWindowEnd,
-      endAnchor = endAnchor,
-      covariateSettings = covariateSettings,
-      caseCovariateSettings = caseCovariateSettings,
-      casePreTargetDuration = casePreTargetDuration,
-      casePostOutcomeDuration = casePostOutcomeDuration
-    )
+  for(i in 1:length(riskWindowStart)){
+    for(j in 1:length(outcomeIdsList)){
+      aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
+        targetIds = targetIds,
+        outcomeIds = outcomeIdsList[[j]],
+        minPriorObservation = minPriorObservation,
+        outcomeWashoutDays = outcomeWashoutDaysVector[j],
+        riskWindowStart = riskWindowStart[i],
+        startAnchor = startAnchor[i],
+        riskWindowEnd = riskWindowEnd[i],
+        endAnchor = endAnchor[i],
+        covariateSettings = covariateSettings,
+        caseCovariateSettings = caseCovariateSettings,
+        casePreTargetDuration = casePreTargetDuration,
+        casePostOutcomeDuration = casePostOutcomeDuration
+      )
+    }
   }
 
 
@@ -127,7 +129,7 @@ createCharacterizationModuleSpecifications <- function(
 
   specifications <- list(
     module = "CharacterizationModule",
-    version = "1.0.5",
+    version = "2.0.0",
     remoteRepo = "github.com",
     remoteUsername = "ohdsi",
     settings = list(

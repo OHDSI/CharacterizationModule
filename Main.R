@@ -59,26 +59,17 @@ execute <- function(jobContext) {
     cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
     characterizationSettings = jobContext$settings$analysis,
     databaseId = jobContext$moduleExecutionSettings$databaseId,
-    saveDirectory = workFolder,
-    tablePrefix = moduleInfo$TablePrefix,
+    outputDirectory = jobContext$moduleExecutionSettings$resultsSubFolder,
+    executionPath = workFolder,
+    csvTablePrefix = moduleInfo$TablePrefix,
     minCellCount = jobContext$moduleExecutionSettings$minCellCount,
     incremental = jobContext$settings$incremental,
-    threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", parallel::detectCores(),Sys.getenv('CharacterizationThreads') )),
+    threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') )),
     minCharacterizationMean = jobContext$settings$minCharacterizationMean
   )
 
   # move results from work folder to output folder
   resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
-
-  csvFileLoc <- file.path(workFolder,'results')
-  csvFiles <- dir(csvFileLoc)
-  for(csvFile in csvFiles){
-    message(paste0('Exporting csv file ', csvFile))
-    file.copy(
-      from = file.path(csvFileLoc, csvFile),
-      to = file.path(resultsFolder, paste0(moduleInfo$TablePrefix,csvFile))
-    )
-  }
 
   # Export the resultsDataModelSpecification.csv
   resultsDataModel <- CohortGenerator::readCsv(
