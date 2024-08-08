@@ -61,7 +61,7 @@ execute <- function(jobContext) {
     databaseId = jobContext$moduleExecutionSettings$databaseId,
     outputDirectory = jobContext$moduleExecutionSettings$resultsSubFolder,
     executionPath = workFolder,
-    csvTablePrefix = moduleInfo$TablePrefix,
+    csvFilePrefix = moduleInfo$TablePrefix,
     minCellCount = jobContext$moduleExecutionSettings$minCellCount,
     incremental = jobContext$settings$incremental,
     threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') )),
