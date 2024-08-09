@@ -31,14 +31,14 @@
     },
     "Characterization": {
       "Package": "Characterization",
-      "Version": "1.1.1",
+      "Version": "2.0.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "Characterization",
       "RemoteUsername": "OHDSI",
-      "RemoteRef": "develop",
-      "RemoteSha": "66de538c9aa575f14351be583b3606cec5914579",
+      "RemoteRef": "main",
+      "RemoteSha": "533a1789756b65e231e8fb52a5dcc9b2736ba726",
       "Requirements": [
         "Andromeda",
         "DatabaseConnector",
@@ -52,7 +52,7 @@
         "readr",
         "rlang"
       ],
-      "Hash": "66de538c9aa575f14351be583b3606cec5914579"
+      "Hash": "533a1789756b65e231e8fb52a5dcc9b2736ba726"
     },
     "CohortGenerator": {
       "Package": "CohortGenerator",
@@ -508,7 +508,7 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.4",
+      "Version": "1.8.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
