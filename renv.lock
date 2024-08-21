@@ -38,7 +38,7 @@
       "RemoteRepo": "Characterization",
       "RemoteUsername": "OHDSI",
       "RemoteRef": "main",
-      "RemoteSha": "67c253d37684029a1615bb329838148fdb9ee3f6",
+      "RemoteSha": "67613dcfd0d8a676de2ecfbea84f812a90bac5d8",
       "Requirements": [
         "Andromeda",
         "DatabaseConnector",
@@ -52,7 +52,7 @@
         "readr",
         "rlang"
       ],
-      "Hash": "67c253d37684029a1615bb329838148fdb9ee3f6"
+      "Hash": "67613dcfd0d8a676de2ecfbea84f812a90bac5d8"
     },
     "CohortGenerator": {
       "Package": "CohortGenerator",
