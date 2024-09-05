@@ -34,7 +34,7 @@ execute <- function(jobContext) {
   rlang::inform("Validating inputs")
   inherits(jobContext, "list")
 
-  if (is.null(jobContext$settings)) {
+  if (is.null(jobContext$settings$analysis)) {
     stop("Analysis settings not found in job context")
   }
   if (is.null(jobContext$sharedResources)) {
@@ -57,32 +57,19 @@ execute <- function(jobContext) {
     outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
     outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
     cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-    characterizationSettings = jobContext$settings,
+    characterizationSettings = jobContext$settings$analysis,
     databaseId = jobContext$moduleExecutionSettings$databaseId,
-    saveDirectory = workFolder,
-    tablePrefix = moduleInfo$TablePrefix
+    outputDirectory = jobContext$moduleExecutionSettings$resultsSubFolder,
+    executionPath = workFolder,
+    csvFilePrefix = moduleInfo$TablePrefix,
+    minCellCount = jobContext$moduleExecutionSettings$minCellCount,
+    incremental = jobContext$settings$incremental,
+    threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') )),
+    minCharacterizationMean = jobContext$settings$minCharacterizationMean
   )
 
-
-  # Export the results
-  rlang::inform("Export data to csv files")
-
-  sqliteConnectionDetails <- DatabaseConnector::createConnectionDetails(
-    dbms = "sqlite",
-    server = file.path(workFolder, "sqliteCharacterization", "sqlite.sqlite")
-  )
-
-  # get the result location folder
+  # move results from work folder to output folder
   resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
-
-  Characterization::exportDatabaseToCsv(
-    connectionDetails = sqliteConnectionDetails,
-    resultSchema = "main",
-    tempEmulationSchema = NULL,
-    tablePrefix = moduleInfo$TablePrefix,
-    filePrefix = moduleInfo$TablePrefix,
-    saveDirectory = resultsFolder
-  )
 
   # Export the resultsDataModelSpecification.csv
   resultsDataModel <- CohortGenerator::readCsv(
@@ -104,12 +91,6 @@ execute <- function(jobContext) {
     warnOnUploadRuleViolations = FALSE
   )
 
-  # Zip the results
-  rlang::inform("Zipping csv files")
-  DatabaseConnector::createZipFile(
-    zipFile = file.path(resultsFolder, "results.zip"),
-    files = resultsFolder
-  )
 }
 
 createDataModelSchema <- function(jobContext) {
@@ -121,26 +102,10 @@ createDataModelSchema <- function(jobContext) {
   resultsDatabaseSchema <- jobContext$moduleExecutionSettings$resultsDatabaseSchema
   # Workaround for issue https://github.com/tidyverse/vroom/issues/519:
   readr::local_edition(1)
-  resultsDataModel <- ResultModelManager::loadResultsDataModelSpecifications(
-    filePath = system.file(
-      "settings/resultsDataModelSpecification.csv",
-      package = "Characterization"
-    )
-  )
-  resultsDataModel$tableName <- paste0(tablePrefix, resultsDataModel$tableName)
-  sql <- ResultModelManager::generateSqlSchema(
-    schemaDefinition = resultsDataModel
-  )
-  sql <- SqlRender::render(
-    sql = sql,
-    database_schema = resultsDatabaseSchema
-  )
-  connection <- DatabaseConnector::connect(
-    connectionDetails = connectionDetails
-  )
-  on.exit(DatabaseConnector::disconnect(connection))
-  DatabaseConnector::executeSql(
-    connection = connection,
-    sql = sql
+  Characterization::createCharacterizationTables(
+    connectionDetails = connectionDetails,
+    resultSchema = resultsDatabaseSchema,
+    targetDialect = connectionDetails$dbms,
+    tablePrefix = moduleInfo$TablePrefix
   )
 }
